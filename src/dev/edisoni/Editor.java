@@ -2,6 +2,7 @@ package dev.edisoni;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dev.edisoni.UIElements.UISprite;
 
@@ -70,10 +72,48 @@ public class Editor implements ApplicationListener {
         stage.addActor(windowCode);
 
 
+        final TextArea textField = new TextArea("",skin);
+        textField.setText("" +
+                "//Base code\n" +
+                "\n" +
+                "public void onCreate() {\n" +
+                "\n" +
+                "}\n" +
+                "\n" +
+                "\n" +
+                "public void onUpdate() {\n" +
+                "\n" +
+                "\n" +
+                "}\n");
+
+
+        TextButton textOk = new TextButton("OK",skin);
+        textOk.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                windowCode.setVisible(false);
+            }
+        });
+        TextButton textCancel = new TextButton("Cancel", skin);
+        textCancel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                windowCode.setVisible(false);
+            }
+        });
+
+        windowCode.add(textField).size(windowCode.getWidth() - 50 ,windowCode.getHeight() - textOk.getHeight() - 50);
+        windowCode.row();
+        windowCode.add(textCancel).size(windowCode.getWidth() - 50,25).expand();
+        windowCode.row();
+        windowCode.add(textOk).size(windowCode.getWidth() - 50, 25).expand();
+
+
+
+
 
         // Buttons tools
         TextButton buttonAddSprite = new TextButton("Add Sprite", skin);
-        windowTools.add(buttonAddSprite).size(380, 30).padTop(10.0f).top().expand();
         buttonAddSprite.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -86,10 +126,8 @@ public class Editor implements ApplicationListener {
 
             }
         });
-        windowTools.row();
         // Buttons tools
         TextButton buttonCode = new TextButton("Add code", skin);
-        windowTools.add(buttonCode).size(380, 30);
         buttonCode.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -98,6 +136,20 @@ public class Editor implements ApplicationListener {
             }
         });
 
+
+        Table buttonsTools = new Table(skin);
+        buttonsTools.add(buttonAddSprite).size(windowTools.getWidth() - 50,25).padTop(15.0f);
+        buttonsTools.row();
+        buttonsTools.add(buttonCode).size(windowTools.getWidth() - 50,25).padTop(5.0f);
+        buttonsTools.row();
+        windowTools.add(buttonsTools).top().expand();
+        windowTools.row();
+
+        Table tableParams = new Table(skin);
+        tableParams.add("Name : ");
+        tableParams.add(new TextField("textureName",skin));
+        tableParams.row();
+        windowTools.add(tableParams).fillX();
 
 
 
