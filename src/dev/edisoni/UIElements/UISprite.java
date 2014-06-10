@@ -1,6 +1,7 @@
 package dev.edisoni.UIElements;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import dev.edisoni.Assets;
 import dev.edisoni.Editor;
 
 /**
@@ -17,9 +19,14 @@ public class UISprite extends Actor {
     Sprite sprite;
     boolean selected = false;
     boolean dragged  = false;
+    boolean visible  = true;
     String textureName;
+
     public UISprite(TextureRegion textureRegion, float x,float y) {
-        textureName = textureRegion.getTexture().getTextureData().getType().name();
+
+        textureName = Assets.defaultSprite;
+        setName("GameObject");
+
         sprite = new Sprite(textureRegion);
         sprite.setPosition(x, y);
         setBounds(x, y, sprite.getWidth(), sprite.getHeight());
@@ -40,6 +47,18 @@ public class UISprite extends Actor {
     }
     public void select() { selected = true;}
     public void unselect() {selected = false;}
+    public void changeSprite(Texture texture) {
+        sprite.setTexture(texture);
+        sprite.setSize(texture.getWidth(),texture.getHeight());
+        setBounds(getX(), getY(), texture.getWidth(), getHeight());
+    }
+
+    public String getTexture() {
+        return textureName;
+    }
+    public void setTexture(String texture) {
+        this.textureName = texture;
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
