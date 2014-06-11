@@ -3,6 +3,7 @@ package dev.edisoni;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -15,8 +16,11 @@ import java.io.IOException;
  * Created by evgenijpalenkov on 10.06.14.
  */
 public class PanelButtons extends Table {
+
+
     public PanelButtons( Skin skin) {
         super(skin);
+        setTouchable(Touchable.enabled);
         TextButton buttonAddSprite = new TextButton("Add Sprite", skin);
         buttonAddSprite.addListener(new InputListener() {
             @Override
@@ -70,5 +74,6 @@ public class PanelButtons extends Table {
         row();
         window.add(this).top().expand();
         window.row();
+
     }
 }

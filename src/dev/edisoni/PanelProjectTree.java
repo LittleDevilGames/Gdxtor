@@ -1,6 +1,7 @@
 package dev.edisoni;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import dev.edisoni.UIElements.UISprite;
 
@@ -20,7 +21,7 @@ public class PanelProjectTree  extends Table {
     Skin skin;
     public PanelProjectTree(Skin skin) {
         this.skin = skin;
-
+        setTouchable(Touchable.enabled);
         Tree tree = new Tree(skin);
         Tree.Node root = new Tree.Node(new Label("Root",skin));
         backgrounds = new Tree.Node(new Label("Backgrounds",skin));

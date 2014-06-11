@@ -1,6 +1,7 @@
 package dev.edisoni;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Array;
 import dev.edisoni.UIElements.UISprite;
 
+import javax.xml.soap.Text;
+
 /**
  * Created by evgenijpalenkov on 10.06.14.
  */
@@ -25,6 +28,7 @@ public class PanelParams extends Table {
 
     public PanelParams( Skin skin) {
         super(skin);
+        setTouchable(Touchable.enabled);
         Label labelParam = new Label("Param ",skin);
         Label labelValue = new Label("Value ",skin);
         add(labelParam);
@@ -52,10 +56,14 @@ public class PanelParams extends Table {
                 if (selectedElement != null) {
                     String text = textureName.getText();
                     if (text.indexOf(".png") != -1) {
-                        UISprite uiSprite = (UISprite)selectedElement;
-                        uiSprite.changeSprite(new Texture(text));
-                        uiSprite.setName(objectName.getText());
-                        uiSprite.setTexture(textureName.getText());
+                        if (Gdx.files.internal(text).exists()) {
+                            UISprite uiSprite = (UISprite)selectedElement;
+                            uiSprite.changeSprite(new Texture(text));
+                            uiSprite.setName(objectName.getText());
+                            uiSprite.setTexture(textureName.getText());
+                        } else {
+                            //TODO: Console message about error;
+                        }
                     }
                 }
             }
