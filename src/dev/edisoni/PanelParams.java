@@ -4,18 +4,10 @@ package dev.edisoni;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
-import com.badlogic.gdx.utils.Array;
-import dev.edisoni.UIElements.UISprite;
-
-import javax.xml.soap.Text;
+import dev.edisoni.SceneElements.SCSprite;
 
 /**
  * Created by evgenijpalenkov on 10.06.14.
@@ -57,10 +49,10 @@ public class PanelParams extends Table {
                     String text = textureName.getText();
                     if (text.indexOf(".png") != -1) {
                         if (Gdx.files.internal(text).exists()) {
-                            UISprite uiSprite = (UISprite)selectedElement;
-                            uiSprite.changeSprite(new Texture(text));
-                            uiSprite.setName(objectName.getText());
-                            uiSprite.setTexture(textureName.getText());
+                            SCSprite SCSprite = (SCSprite)selectedElement;
+                            SCSprite.changeSprite(new Texture(text));
+                            SCSprite.setName(objectName.getText());
+                            SCSprite.setTexture(textureName.getText());
                         } else {
                             //TODO: Console message about error;
                         }
@@ -80,10 +72,10 @@ public class PanelParams extends Table {
     }
 
     public void showParams(Actor actor) {
-        if (actor instanceof UISprite) {
+        if (actor instanceof SCSprite) {
             selectedElement = actor;
             objectName.setText(actor.getName());
-            textureName.setText(((UISprite)actor).getTexture());
+            textureName.setText(((SCSprite)actor).getTexture());
             setVisible(true);
         }
     }

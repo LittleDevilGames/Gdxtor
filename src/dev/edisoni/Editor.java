@@ -10,15 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import dev.edisoni.UIElements.UISprite;
-import org.lwjgl.opengl.GL11;
+import dev.edisoni.SceneElements.SCSprite;
 
 /**
  * Created by Edisoni on 09.06.14.
  */
 public class Editor implements ApplicationListener {
 
-    static Skin skin;
+    public static Skin skin;
 
     public static Stage hud;
     public static Stage scene;
@@ -33,9 +32,11 @@ public class Editor implements ApplicationListener {
     static Window windowTools;
     static Window windowLaunch;
     static Window windowStruct;
+    static Window windowAssets;
 
     static PanelParams panelParams;
     static PanelButtons panelButtons;
+    static PanelLaunchs panelLaunchs;
     static PanelProjectTree panelProjectTree;
 
     @Override
@@ -110,9 +111,18 @@ public class Editor implements ApplicationListener {
         hud.addActor(windowLaunch);
 
 
+        windowAssets = new Window("Assets Provider", skin);
+        windowAssets.setSize(600,600);
+        windowAssets.setResizable(false);
+        windowAssets.setMovable(true);
+        windowAssets.setPosition(Gdx.graphics.getWidth() / 2 - windowAssets.getWidth() / 2, Gdx.graphics.getHeight() / 2 - windowAssets.getHeight() / 2);
+        windowAssets.setVisible(false);
+        hud.addActor(windowAssets);
+
         panelButtons = new PanelButtons(skin);
         panelParams = new PanelParams(skin);
         panelProjectTree = new PanelProjectTree(skin);
+        panelLaunchs = new PanelLaunchs();
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -144,13 +154,13 @@ public class Editor implements ApplicationListener {
     }
 
     public static void onSelected(Actor actor) {
-        if (actor instanceof UISprite) {
+        if (actor instanceof SCSprite) {
             if (selectedElement != null) {
-                UISprite element = (UISprite) selectedElement;
+                SCSprite element = (SCSprite) selectedElement;
                 element.unselect();
             }
             selectedElement = actor;
-            ((UISprite) selectedElement).select();
+            ((SCSprite) selectedElement).select();
         }
         panelParams.showParams(actor);
     }

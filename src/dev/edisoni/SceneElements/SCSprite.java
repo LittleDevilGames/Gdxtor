@@ -1,20 +1,15 @@
-package dev.edisoni.UIElements;
+package dev.edisoni.SceneElements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Shader;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import dev.edisoni.Assets;
 import dev.edisoni.Editor;
 
@@ -22,14 +17,14 @@ import dev.edisoni.Editor;
 /**
  * Created by Edisoni on 09.06.14.
  */
-public class UISprite extends Actor {
+public class SCSprite extends Actor {
     Sprite sprite;
     boolean selected = false;
     boolean dragged = false;
     boolean visible = true;
     String textureName;
 
-    public UISprite(TextureRegion textureRegion, float x, float y) {
+    public SCSprite(TextureRegion textureRegion, float x, float y) {
         textureName = Assets.defaultSprite;
         setName("GameObject");
         sprite = new Sprite(textureRegion);
@@ -39,7 +34,7 @@ public class UISprite extends Actor {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dragged = true;
-                Editor.onSelected(UISprite.this);
+                Editor.onSelected(SCSprite.this);
                 return true;
             }
 

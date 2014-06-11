@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import dev.edisoni.UIElements.UISprite;
+import dev.edisoni.SceneElements.SCSprite;
 
 import java.io.IOException;
 
@@ -26,8 +26,8 @@ public class PanelButtons extends Table {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 TextureRegion  textureRegion = Assets.getTexture(Assets.defaultSprite);
-                UISprite uiSprite = new UISprite(textureRegion, Editor.CENTERX - textureRegion.getRegionWidth()/2,Editor.CENTERY - textureRegion.getRegionHeight()/2);
-                Editor.addActorToScene(uiSprite);
+                SCSprite SCSprite = new SCSprite(textureRegion, Editor.CENTERX - textureRegion.getRegionWidth()/2,Editor.CENTERY - textureRegion.getRegionHeight()/2);
+                Editor.addActorToScene(SCSprite);
 
                 return false;
             }
