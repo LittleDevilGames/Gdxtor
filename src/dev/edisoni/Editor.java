@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import dev.edisoni.SceneElements.SCSprite;
+import dev.edisoni.SceneElements.SCGameObject;
 
 /**
  * Created by Edisoni on 09.06.14.
@@ -38,11 +38,21 @@ public class Editor implements ApplicationListener {
     static PanelButtons panelButtons;
     static PanelLaunchs panelLaunchs;
     static PanelProjectTree panelProjectTree;
+    static PanelAssets panelAssets;
 
     @Override
     public void create() {
         Assets.load();
+        Assets.addAction(new Action() {
+            @Override
+            public boolean act(float delta) {
+                onCreate();
+                return false;
+            }
+        });
+    }
 
+    public static void onCreate() {
         CENTERX = (Gdx.graphics.getWidth() - 400) / 2;
         CENTERY = (Gdx.graphics.getHeight() - 100) / 2;
 
@@ -68,8 +78,8 @@ public class Editor implements ApplicationListener {
 
             @Override
             public boolean scrolled(InputEvent event, float x, float y, int amount) {
-                OrthographicCamera camera = (OrthographicCamera)scene.getCamera();
-                camera.zoom += amount/10.0f;
+                OrthographicCamera camera = (OrthographicCamera) scene.getCamera();
+                camera.zoom += amount / 10.0f;
                 return true;
             }
         });
@@ -112,7 +122,7 @@ public class Editor implements ApplicationListener {
 
 
         windowAssets = new Window("Assets Provider", skin);
-        windowAssets.setSize(600,600);
+        windowAssets.setSize(700, 600);
         windowAssets.setResizable(false);
         windowAssets.setMovable(true);
         windowAssets.setPosition(Gdx.graphics.getWidth() / 2 - windowAssets.getWidth() / 2, Gdx.graphics.getHeight() / 2 - windowAssets.getHeight() / 2);
@@ -123,6 +133,7 @@ public class Editor implements ApplicationListener {
         panelParams = new PanelParams(skin);
         panelProjectTree = new PanelProjectTree(skin);
         panelLaunchs = new PanelLaunchs();
+        panelAssets = new PanelAssets();
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -154,13 +165,13 @@ public class Editor implements ApplicationListener {
     }
 
     public static void onSelected(Actor actor) {
-        if (actor instanceof SCSprite) {
+        if (actor instanceof SCGameObject) {
             if (selectedElement != null) {
-                SCSprite element = (SCSprite) selectedElement;
+                SCGameObject element = (SCGameObject) selectedElement;
                 element.unselect();
             }
             selectedElement = actor;
-            ((SCSprite) selectedElement).select();
+            ((SCGameObject) selectedElement).select();
         }
         panelParams.showParams(actor);
     }
@@ -173,12 +184,15 @@ public class Editor implements ApplicationListener {
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shape.drawOnBack();
-        scene.act(Gdx.graphics.getDeltaTime());
-        scene.draw();
-        shape.drawOnFront();
-        hud.act(Gdx.graphics.getDeltaTime());
-        hud.draw();
+        if (shape != null) {
+            shape.drawOnBack();
+            scene.act(Gdx.graphics.getDeltaTime());
+            scene.draw();
+            shape.drawOnFront();
+            hud.act(Gdx.graphics.getDeltaTime());
+            hud.draw();
+        }
+        Assets.update();
     }
 
     @Override

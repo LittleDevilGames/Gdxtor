@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import dev.edisoni.SceneElements.SCSprite;
+import dev.edisoni.SceneElements.SCGameObject;
 
 /**
- * Created by evgenijpalenkov on 10.06.14.
+ * Created by Edisoni on 10.06.14.
  */
 public class PanelParams extends Table {
     Actor selectedElement;
@@ -49,10 +49,10 @@ public class PanelParams extends Table {
                     String text = textureName.getText();
                     if (text.indexOf(".png") != -1) {
                         if (Gdx.files.internal(text).exists()) {
-                            SCSprite SCSprite = (SCSprite)selectedElement;
-                            SCSprite.changeSprite(new Texture(text));
-                            SCSprite.setName(objectName.getText());
-                            SCSprite.setTexture(textureName.getText());
+                            SCGameObject SCGameObject = (SCGameObject)selectedElement;
+                            SCGameObject.changeTexture(new Texture(text));
+                            SCGameObject.setName(objectName.getText());
+                            SCGameObject.setTextureName(textureName.getText());
                         } else {
                             //TODO: Console message about error;
                         }
@@ -72,10 +72,10 @@ public class PanelParams extends Table {
     }
 
     public void showParams(Actor actor) {
-        if (actor instanceof SCSprite) {
+        if (actor instanceof SCGameObject) {
             selectedElement = actor;
             objectName.setText(actor.getName());
-            textureName.setText(((SCSprite)actor).getTexture());
+            textureName.setText(((SCGameObject)actor).getTexture());
             setVisible(true);
         }
     }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.util.logging.FileHandler;
 
 /**
- * Created by evgenijpalenkov on 11.06.14.
+ * Created by Edisoni on 11.06.14.
  */
 public class PanelLaunchs  extends Table {
     public PanelLaunchs() {
@@ -19,10 +19,6 @@ public class PanelLaunchs  extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Editor.windowAssets.setVisible(true);
-                FileHandle fileHandle = Gdx.files.local("");
-                for(FileHandle file : fileHandle.list()) {
-                    System.out.println("File : " + file.path());
-                }
 
             }
         });

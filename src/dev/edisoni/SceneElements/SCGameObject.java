@@ -12,19 +12,20 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import dev.edisoni.Assets;
 import dev.edisoni.Editor;
+import dev.edisoni.Shape;
 
 
 /**
  * Created by Edisoni on 09.06.14.
  */
-public class SCSprite extends Actor {
+public class SCGameObject extends Actor {
     Sprite sprite;
     boolean selected = false;
     boolean dragged = false;
     boolean visible = true;
     String textureName;
 
-    public SCSprite(TextureRegion textureRegion, float x, float y) {
+    public SCGameObject(Texture textureRegion, float x, float y) {
         textureName = Assets.defaultSprite;
         setName("GameObject");
         sprite = new Sprite(textureRegion);
@@ -34,7 +35,7 @@ public class SCSprite extends Actor {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dragged = true;
-                Editor.onSelected(SCSprite.this);
+                Editor.onSelected(SCGameObject.this);
                 return true;
             }
 
@@ -54,7 +55,7 @@ public class SCSprite extends Actor {
         selected = false;
     }
 
-    public void changeSprite(Texture texture) {
+    public void changeTexture(Texture texture) {
         sprite.setTexture(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
@@ -64,7 +65,7 @@ public class SCSprite extends Actor {
         return textureName;
     }
 
-    public void setTexture(String texture) {
+    public void setTextureName(String texture) {
         this.textureName = texture;
     }
 
@@ -80,8 +81,7 @@ public class SCSprite extends Actor {
             setPosition(xx, yy);
         }
         if (selected) {
-            Editor.shape.setWidth(5);
-            Editor.shape.drawRect(getX()-2.5f,getY()-2.5f,getWidth()+5,getHeight()+5, Color.GREEN);
+            Editor.shape.drawRect(getX()-5,getY()-5,getWidth()+10,getHeight()+10,batch);
         }
         sprite.draw(batch);
 
