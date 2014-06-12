@@ -1,8 +1,9 @@
 package dev.edisoni;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import dev.edisoni.UIElements.UISprite;
+import dev.edisoni.SceneElements.SCGameObject;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class PanelProjectTree  extends Table {
     Skin skin;
     public PanelProjectTree(Skin skin) {
         this.skin = skin;
-
+        setTouchable(Touchable.enabled);
         Tree tree = new Tree(skin);
         Tree.Node root = new Tree.Node(new Label("Root",skin));
         backgrounds = new Tree.Node(new Label("Backgrounds",skin));
@@ -38,14 +39,14 @@ public class PanelProjectTree  extends Table {
         Editor.windowStruct.add(this).top().expand();
     }
     public void addGameObject(Actor actor) {
-        if (actor instanceof UISprite) {
+        if (actor instanceof SCGameObject) {
             Tree.Node node = new Tree.Node(new Label(actor.getName(),skin));
             gameObjects.add(node);
             listGameObjects.add(actor);
         }
     }
     public void removeGameObject(Actor actor) {
-        if (actor instanceof UISprite) {
+        if (actor instanceof SCGameObject) {
             int index =  listGameObjects.indexOf(actor);
             gameObjects.getChildren().get(index).getActor().remove();
             gameObjects.getChildren().removeIndex(index);

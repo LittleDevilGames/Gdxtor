@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class Main {
 
-    private static final String title = "LibGDX";
+    private static final String title = "GdxTOR";
     private static final int widht = 1440;
     private static final int height = 900;
 
@@ -15,6 +15,7 @@ public class Main {
         configuration.height = height;
         configuration.title = title;
         configuration.resizable = false;
+        configuration.samples = 16;
         new LwjglApplication(new Editor(),configuration);
     }
 }

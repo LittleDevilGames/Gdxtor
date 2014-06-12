@@ -1,21 +1,16 @@
 package dev.edisoni;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
-import com.badlogic.gdx.utils.Array;
-import dev.edisoni.UIElements.UISprite;
+import dev.edisoni.SceneElements.SCGameObject;
 
 /**
- * Created by evgenijpalenkov on 10.06.14.
+ * Created by Edisoni on 10.06.14.
  */
 public class PanelParams extends Table {
     Actor selectedElement;
@@ -25,6 +20,7 @@ public class PanelParams extends Table {
 
     public PanelParams( Skin skin) {
         super(skin);
+        setTouchable(Touchable.enabled);
         Label labelParam = new Label("Param ",skin);
         Label labelValue = new Label("Value ",skin);
         add(labelParam);
@@ -52,10 +48,14 @@ public class PanelParams extends Table {
                 if (selectedElement != null) {
                     String text = textureName.getText();
                     if (text.indexOf(".png") != -1) {
-                        UISprite uiSprite = (UISprite)selectedElement;
-                        uiSprite.changeSprite(new Texture(text));
-                        uiSprite.setName(objectName.getText());
-                        uiSprite.setTexture(textureName.getText());
+                        if (Gdx.files.internal(text).exists()) {
+                            SCGameObject SCGameObject = (SCGameObject)selectedElement;
+                            SCGameObject.changeTexture(new Texture(text));
+                            SCGameObject.setName(objectName.getText());
+                            SCGameObject.setTextureName(textureName.getText());
+                        } else {
+                            //TODO: Console message about error;
+                        }
                     }
                 }
             }
@@ -72,10 +72,10 @@ public class PanelParams extends Table {
     }
 
     public void showParams(Actor actor) {
-        if (actor instanceof UISprite) {
+        if (actor instanceof SCGameObject) {
             selectedElement = actor;
             objectName.setText(actor.getName());
-            textureName.setText(((UISprite)actor).getTexture());
+            textureName.setText(((SCGameObject)actor).getTexture());
             setVisible(true);
         }
     }
