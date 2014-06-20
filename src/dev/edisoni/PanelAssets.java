@@ -44,17 +44,17 @@ public class PanelAssets extends Table {
 
                         int column = 0;
                         int columnTotal = 3;
-                        for (int i = 0; i < Assets.getCount(); i++) {
+                        for (int i = 0; i < Assets.getCountTextures(); i++) {
 
                             if (column < columnTotal) {
-                                add(new UIAsset(Assets.getTexture(i), "LOLKA")).size(200, 200).pad(15.0f);
+                                String nameTexture = Assets.getNameTexture(i);
+                                Texture texture = Assets.getTexture(nameTexture);
+                                add(new UIAsset(texture, nameTexture)).size(200, 220).pad(25.0f);
                                 column++;
                             } else {
                                 column = 0;
                                 row();
                             }
-
-
                         }
                         return false;
                     }
@@ -70,6 +70,7 @@ public class PanelAssets extends Table {
         window.row();
 
         ScrollPane scrollPane = new ScrollPane(this, Editor.skin);
+        scrollPane.setFlickScroll(false);
         window.add(scrollPane).size(window.getWidth(), window.getHeight() - 100);
     }
 

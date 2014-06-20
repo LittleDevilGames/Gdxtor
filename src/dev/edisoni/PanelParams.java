@@ -2,11 +2,15 @@ package dev.edisoni;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dev.edisoni.SceneElements.SCGameObject;
 
 /**
@@ -16,7 +20,7 @@ public class PanelParams extends Table {
     Actor selectedElement;
 
     TextField objectName;
-    TextField textureName;
+    TextButton textureButton;
 
     public PanelParams( Skin skin) {
         super(skin);
@@ -27,46 +31,48 @@ public class PanelParams extends Table {
         add(labelValue);
         row();
 
-        add("Name : ");
+        add("Name : ").padRight(10.0f);
         objectName = new TextField("name", skin);
         objectName.setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
                 if (selectedElement!=null) {
-                    selectedElement.setName(objectName.getText());
+                    SCGameObject go = (SCGameObject)selectedElement;
+                    go.changeName(objectName.getText());
                     Editor.panelProjectTree.refreshTree();
                 }
             }
         });
         add(objectName);
         row();
-        add("Texture : ");
-        textureName = new TextField("texture",skin);
-        textureName.setTextFieldListener(new TextField.TextFieldListener() {
+        add("Texture:").padRight(10.0f);
+        textureButton = new TextButton("default.png",Editor.skin);
+        textureButton.setWidth(objectName.getWidth());
+        textureButton.addListener(new ClickListener() {
             @Override
-            public void keyTyped(TextField textField, char c) {
-                if (selectedElement != null) {
-                    String text = textureName.getText();
-                    if (text.indexOf(".png") != -1) {
-                        if (Gdx.files.internal(text).exists()) {
-                            SCGameObject SCGameObject = (SCGameObject)selectedElement;
-                            SCGameObject.changeTexture(new Texture(text));
-                            SCGameObject.setName(objectName.getText());
-                            SCGameObject.setTextureName(textureName.getText());
-                        } else {
-                            //TODO: Console message about error;
-                        }
-                    }
-                }
+            public void clicked(InputEvent event, float x, float y) {
+                Editor.windowAssets.setVisible(true);
+                Editor.windowAssets.toFront();
             }
         });
-        add(textureName);
+
+        add(textureButton).left();
         row();
-        add("Visible : ");
+        add("Visible : ").padRight(10.0f);
         SelectBox visibles = new SelectBox(skin);
         visibles.setItems(new String[] {"true","false"});
-        add(visibles).size(textureName.getWidth(),textureName.getHeight());
+        add(visibles).size(textureButton.getWidth(),textureButton.getHeight());
 
+
+        addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode== Input.Keys.ENTER) {
+                    Editor.hud.setKeyboardFocus(null);
+                }
+                return true;
+            }
+        });
         setVisible(false);
         Editor.windowTools.add(this);
     }
@@ -74,8 +80,9 @@ public class PanelParams extends Table {
     public void showParams(Actor actor) {
         if (actor instanceof SCGameObject) {
             selectedElement = actor;
-            objectName.setText(actor.getName());
-            textureName.setText(((SCGameObject)actor).getTexture());
+            objectName.setText(((SCGameObject) actor).getNameObject());
+            textureButton.setText(((SCGameObject)actor).getTexture());
+            textureButton.setWidth(objectName.getWidth());
             setVisible(true);
         }
     }

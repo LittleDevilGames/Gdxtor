@@ -1,5 +1,6 @@
 package dev.edisoni;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,12 +27,14 @@ public class Shape {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+        float width  = 1400.0f;
+        float height = 1400.0f;
         setWidth(3.0f);
-        for (int x = 0; x <= 1000; x += 50) {
-            drawLine(x,0,x,1000);
+        for (int x = 0; x <= width; x += 50) {
+            drawLine(x,0,x,width);
         }
-        for (int y = 0; y <= 1000; y += 50) {
-            drawLine(0,y,1000,y);
+        for (int y = 0; y <= height; y += 50) {
+            drawLine(0,y, height ,y);
         }
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

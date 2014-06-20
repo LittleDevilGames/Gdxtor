@@ -1,11 +1,9 @@
 package dev.edisoni;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -27,7 +25,7 @@ public class Editor implements ApplicationListener {
     public static float CENTERX;
     public static float CENTERY;
 
-    public static boolean MOVESCENE = false;
+    public static float SPEEDMOVE = 5.0f;
 
     static Window windowTools;
     static Window windowLaunch;
@@ -61,17 +59,9 @@ public class Editor implements ApplicationListener {
         shape = new Shape(scene.getCamera());
         scene.addListener(new InputListener() {
             @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.SPACE) {
-                    MOVESCENE = true;
-                }
-                return true;
-            }
-
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.SPACE) {
-                    MOVESCENE = false;
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (x > 220 && x < 250 && y > 0 && y < 80) {
+                    hud.setKeyboardFocus(null);
                 }
                 return true;
             }
@@ -80,15 +70,8 @@ public class Editor implements ApplicationListener {
             public boolean scrolled(InputEvent event, float x, float y, int amount) {
                 OrthographicCamera camera = (OrthographicCamera) scene.getCamera();
                 camera.zoom += amount / 10.0f;
+                panelLaunchs.updatePanel(camera.zoom);
                 return true;
-            }
-        });
-        scene.addListener(new DragListener() {
-            @Override
-            public void drag(InputEvent event, float x, float y, int pointer) {
-                if (MOVESCENE) {
-                    ((OrthographicCamera) scene.getCamera()).translate(getDeltaX(), getDeltaY());
-                }
             }
         });
 
@@ -122,7 +105,7 @@ public class Editor implements ApplicationListener {
 
 
         windowAssets = new Window("Assets Provider", skin);
-        windowAssets.setSize(700, 600);
+        windowAssets.setSize(1000, 800);
         windowAssets.setResizable(false);
         windowAssets.setMovable(true);
         windowAssets.setPosition(Gdx.graphics.getWidth() / 2 - windowAssets.getWidth() / 2, Gdx.graphics.getHeight() / 2 - windowAssets.getHeight() / 2);
@@ -140,6 +123,8 @@ public class Editor implements ApplicationListener {
         inputMultiplexer.addProcessor(hud);
         inputMultiplexer.addProcessor(scene);
 
+
+        hud.getRoot().setName("Root");
         // Set starting params;
         Gdx.input.setInputProcessor(inputMultiplexer);
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -164,7 +149,7 @@ public class Editor implements ApplicationListener {
         }
     }
 
-    public static void onSelected(Actor actor) {
+    public static void onSelectedObject(Actor actor) {
         if (actor instanceof SCGameObject) {
             if (selectedElement != null) {
                 SCGameObject element = (SCGameObject) selectedElement;
@@ -174,6 +159,14 @@ public class Editor implements ApplicationListener {
             ((SCGameObject) selectedElement).select();
         }
         panelParams.showParams(actor);
+    }
+
+    public static void onSelectTexture(String texture) {
+        SCGameObject scGameObject = (SCGameObject) selectedElement;
+        scGameObject.changeTexture(Assets.getTexture(texture));
+        scGameObject.setTextureName(texture);
+        panelParams.showParams(scGameObject);
+        windowAssets.setVisible(false);
     }
 
     @Override
@@ -186,12 +179,14 @@ public class Editor implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (shape != null) {
             shape.drawOnBack();
+            this.controls();
             scene.act(Gdx.graphics.getDeltaTime());
             scene.draw();
             shape.drawOnFront();
             hud.act(Gdx.graphics.getDeltaTime());
             hud.draw();
         }
+
         Assets.update();
     }
 
@@ -209,5 +204,29 @@ public class Editor implements ApplicationListener {
     public void dispose() {
         hud.dispose();
         scene.dispose();
+    }
+
+    public void controls() {
+        Actor actor = hud.getKeyboardFocus();
+        System.out.println("Actor : " + actor);
+        if (actor==null) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                OrthographicCamera camera = (OrthographicCamera) scene.getCamera();
+                camera.translate(0, SPEEDMOVE);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                OrthographicCamera camera = (OrthographicCamera) scene.getCamera();
+                camera.translate(0, -SPEEDMOVE);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                OrthographicCamera camera = (OrthographicCamera) scene.getCamera();
+                camera.translate(SPEEDMOVE, 0.0f);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                OrthographicCamera camera = (OrthographicCamera) scene.getCamera();
+                camera.translate(-SPEEDMOVE, 0.0f);
+            }
+        }
+
     }
 }
